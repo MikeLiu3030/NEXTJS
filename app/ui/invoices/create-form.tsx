@@ -13,12 +13,13 @@ import { useActionState, useState, useEffect } from 'react';
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
 
-  
   const initialState: State = {message: null, errors: {}}
   const [state, formAction] = useActionState(createInvoice, initialState);
   console.log("state:",state);
+
+
   const [clearedFields, setClearedFields] = useState<Record<string, boolean>>({});
-    useEffect(() => {
+  useEffect(() => {
       setClearedFields({});
     }, [state]);
 
@@ -84,7 +85,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
               />
               <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
-            <div id="customer-error" aria-live="polite" aria-atomic="true">
+            <div id="amount-error" aria-live="polite" aria-atomic="true">
               {!clearedFields['amount'] && state.errors?.amount &&
                 state.errors.amount.map((error: string) => (
                   <p className="mt-2 text-sm text-red-500" key={error}>
@@ -126,6 +127,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   type="radio"
                   value="paid"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                  onChange={() => handleInputChange('status')}
                 />
                 <label
                   htmlFor="paid"
@@ -135,22 +137,23 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 </label>
               </div>
             </div>
-            <div id="customer-error" aria-live="polite" aria-atomic="true">
-                {!clearedFields['status'] && state.errors?.status &&
-                  state.errors.status.map((error: string) => (
-                    <p className="mt-2 text-sm text-red-500" key={error}>
-                      {error}
-                    </p>
-                  ))}
-            </div>
+          </div>
+          <div id="status-error" aria-live="polite" aria-atomic="true">
+            {!clearedFields['status'] && state.errors?.status &&
+              state.errors.status.map((error: string) => (
+                <p className="mt-2 text-sm text-red-500" key={error}>
+                  {error}
+                </p>
+              ))}
           </div>
         </fieldset>
-        <div id="customer-error" aria-live="polite" aria-atomic="true">
-            { state.message &&              
-                <p className="mt-2 text-sm text-red-500" key={state.message}>
+
+        <div id="form-message-error" aria-live="polite" aria-atomic="true">
+            {state.message && !(clearedFields['customerId'] && clearedFields['amount'] && clearedFields['status']) && (
+                <p className="mt-2 text-sm text-red-500">
                   {state.message}
                 </p>
-            }
+            )}
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
