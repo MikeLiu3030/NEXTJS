@@ -25,6 +25,7 @@ Use the following pre-configured account information to log in and explore the a
 
 | Credential Type | Value |
 | :--- | :--- |
+| **Web** | `https://nextjs-tawny-five.vercel.app` |
 | **Username** | `user@nextmail.com` |
 | **Password** | `123456` |
 
