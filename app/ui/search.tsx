@@ -5,20 +5,22 @@ import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 
 export default function Search({ placeholder }: { placeholder: string }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
+  const searchParams = useSearchParams(); // Get the read-only parameter object of the current URL
+  const pathname = usePathname();  // Get the current page path, like "/dashboard/invoices" 
+  const { replace } = useRouter();  // Get the route jump method
   
+  // Handle search
+  // Use useDebouncedCallback() for debouncing design.
   const handleSearch = useDebouncedCallback((term) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('page', '1');
+    const params = new URLSearchParams(searchParams); // Deep copy 'searchParams', then it can be modify.
+    params.set('page', '1');  // reset the page, if you are searching on page 5, it will jump page 1.
     if (term) {
       params.set('query', term);
     } else {
       params.delete('query');
     }
 
-    replace(`${pathname}?${params.toString()}`);
+    replace(`${pathname}?${params.toString()}`); // Feed the new path to the browser.
   }, 300);
   
   return (
